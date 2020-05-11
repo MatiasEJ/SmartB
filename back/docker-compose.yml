@@ -9,11 +9,11 @@ services:
     environment:
       POSTGRES_URI: postgres://sally:secret@192.168.99.100:5432/smart-brain-docker
     links:
-      - postgres  
+      - postgres
     ports: 
       - "3000:3000"
-    # volumes:
-    #   - .:/usr/src/smart-brain-api
+        #volumes:
+        #- ~./:/usr/src/smart-brain-api
 
   # postgres
   postgres:

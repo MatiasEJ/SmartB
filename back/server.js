@@ -19,7 +19,7 @@ const app = express();
 app.use(morgan('combined'))
 app.use(cors())
 app.use(bodyParser.json());
-console.log("TESTING VOLUMES");
+console.log("A VER SI ARRANCA DE UNA VEZ");
 
 app.get('/', (req, res)=> { res.send("HELLO") })
 app.post('/signin', signin.handleSignin(db, bcrypt))
@@ -29,5 +29,5 @@ app.put('/image', (req, res) => { image.handleImage(req, res, db)})
 app.post('/imageurl', (req, res) => { image.handleApiCall(req, res)})
 
 app.listen(3000, ()=> {
-  console.log('app is running on port 3000');
+  console.log('App is running on port 3000!!!!');
 })
