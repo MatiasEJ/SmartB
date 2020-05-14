@@ -13,22 +13,29 @@ const ProfileIcon = (props) => {
   const toggle = () => setDropdownOpen(prevState => !prevState);
 
   return (
-    <Dropdown isOpen={dropdownOpen} toggle={toggle}>
+    <div className="pa5 tc">
+      <Dropdown isOpen={dropdownOpen} toggle={toggle}>
       <DropdownToggle
-        tag="span"
-        data-toggle="dropdown"
-        aria-expanded={dropdownOpen}
+      caret
+      tag="span"
+      data-toggle="dropdown"
+      aria-expanded={dropdownOpen}
       >
       <img
       src="http://tachyons.io/img/logo.jpg"
-      className="br-100 h3 w3 dib" alt="avatar" />
+      className="br-100 ba h3 w3 dib" alt="avatar" />
       </DropdownToggle>
-      <DropdownMenu className="b--transparent shadow-5" style={{marginTop: '20px', back: 'rbga(255,255,225,0.5)'}}>
+      <DropdownMenu
+      right
+      className="b--transparent shadow-5"
+      style={{back: 'rbga(255,255,225,0.5)'}}
+      >
         <DropdownItem>View Profile</DropdownItem>
-        <DropdownItem>SignOut</DropdownItem>
+        <DropdownItem onClick={() => props.onRouteChange('signout')} > Sign Out</DropdownItem>
         
       </DropdownMenu>
-    </Dropdown>
+      </Dropdown>
+    </div>
   );
 
 }
