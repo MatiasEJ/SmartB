@@ -1,10 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import Particles from 'react-particles-js';
 import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 import Navigation from './components/Navigation/Navigation';
 import Signin from './components/Signin/Signin';
 import Register from './components/Register/Register';
 import Logo from './components/Logo/Logo';
+import Modal from './components/Modal/Modal';
+import Profile from './components/Profile/Profile';
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import Rank from './components/Rank/Rank';
 import './App.css';
@@ -25,14 +27,17 @@ const initialState = {
   input: '',
   imageUrl: '',
   box: [],
-  route: 'home',
-  isSignedIn: true,
+  route: 'signin',
+  isSignedIn: false,
+  isProfileOpen: false,
   user: {
     id: '',
     name: '',
     email: '',
     entries: 0,
-    joined: ''
+    joined: '',
+    pet:'',
+    age:''
   }
 }
 
@@ -53,7 +58,7 @@ class App extends Component {
   }
 
   calculateFaceLocation = (data) => {
-    console.log(data)
+    
     return data.outputs[0].data.regions.map(face =>{
       const clarifaiFace = face.region_info.bounding_box;
       const image = document.getElementById('inputimage');
@@ -117,14 +122,36 @@ class App extends Component {
     this.setState({route: route});
   }
 
+
+  toogleModal = () => {
+    this.setState( (prevState) =>({
+      ...prevState,
+      isProfileOpen: !prevState.isProfileOpen
+    }));
+  }
+
   render() {
-    const { isSignedIn, imageUrl, route, box } = this.state;
+    const { isSignedIn, imageUrl, route, box,isProfileOpen, user} = this.state;
     return (
       <div className="App">
          <Particles className='particles'
           params={particlesOptions}
         />
-        <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange} />
+        <Navigation 
+        isSignedIn={isSignedIn} 
+        toogleModal={this.toogleModal}
+        onRouteChange={this.onRouteChange} />
+
+        { isProfileOpen && 
+          <Modal>
+            <Profile
+            user={user} 
+            isProfileOpen={this.isProfileOpen} 
+            toogleModal={this.toogleModal}
+            />
+          </Modal>
+        }
+        
         { route === 'home'
           ? <div>
               <Logo />

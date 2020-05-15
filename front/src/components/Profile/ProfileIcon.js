@@ -7,7 +7,7 @@ import {
 } from 'reactstrap';
 
 
-const ProfileIcon = (props) => {
+const ProfileIcon = ({toogleModal, onRouteChange}) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const toggle = () => setDropdownOpen(prevState => !prevState);
@@ -30,8 +30,10 @@ const ProfileIcon = (props) => {
       className="b--transparent shadow-5"
       style={{back: 'rbga(255,255,225,0.5)'}}
       >
-        <DropdownItem>View Profile</DropdownItem>
-        <DropdownItem onClick={() => props.onRouteChange('signout')} > Sign Out</DropdownItem>
+        <DropdownItem
+          onClick={toogleModal}
+        >View Profile</DropdownItem>
+        <DropdownItem onClick={() => onRouteChange('signout')} > Sign Out</DropdownItem>
         
       </DropdownMenu>
       </Dropdown>
