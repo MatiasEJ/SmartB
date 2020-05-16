@@ -27,8 +27,8 @@ const initialState = {
   input: '',
   imageUrl: '',
   box: [],
-  route: 'signin',
-  isSignedIn: false,
+  route: 'home',
+  isSignedIn: true,
   isProfileOpen: false,
   user: {
     id: '',
@@ -123,15 +123,17 @@ class App extends Component {
   }
 
 
-  toogleModal = () => {
-    this.setState( (prevState) =>({
+  toggleModal = () => {
+    console.log("HELLO")
+    this.setState( prevState => ({
       ...prevState,
-      isProfileOpen: !prevState.isProfileOpen
+      isProfileOpen: !(prevState.isProfileOpen)
     }));
+   
   }
 
   render() {
-    const { isSignedIn, imageUrl, route, box,isProfileOpen, user} = this.state;
+    const { isSignedIn, imageUrl, route, box, isProfileOpen, user} = this.state;
     return (
       <div className="App">
          <Particles className='particles'
@@ -139,17 +141,18 @@ class App extends Component {
         />
         <Navigation 
         isSignedIn={isSignedIn} 
-        toogleModal={this.toogleModal}
+        isProfileOpen={isProfileOpen}
+        toogleModal = {this.toggleModal}
         onRouteChange={this.onRouteChange} />
 
-        { isProfileOpen && 
+        { isProfileOpen ?
           <Modal>
             <Profile
-            user={user} 
-            isProfileOpen={this.isProfileOpen} 
-            toogleModal={this.toogleModal}
+              user={user} 
+              isProfileOpen={isProfileOpen}
+              toggleModal={this.toggleModal}
             />
-          </Modal>
+          </Modal> :null
         }
         
         { route === 'home'
