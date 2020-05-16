@@ -30,8 +30,23 @@ class Profile extends React.Component{
       }
     }
 
+    onProfileUpdate = (data) =>{
+
+      fetch('http://192.168.99.100:3000/profile/'+this.props.user.id, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ formInput: data})
+      })
+      .then(response=>{
+        this.props.toggleModal();
+        this.props.loadUser({ ...this.props.user, ...data});
+      })
+      .catch(e => console.log(e))
+    }
+
   render(){ 
     const {user} = this.props;
+    const {name, age, pet } = this.state;
     return (
       <div className="profile-modal">
       
@@ -78,8 +93,14 @@ class Profile extends React.Component{
        
       
         <div className="mt4" style={{display:'flex',justifyContent: 'space-evenly'}}>
-          <button className="b pa2 grow pointer hover-white w-40 bg-light-blue" >Save</button>
-          <button className="b pa2 grow pointer hover-white w-40 bg-light-red" onClick={this.props.toggleModal}>Cancel</button>
+          <button 
+          className="b pa2 grow pointer hover-white w-40 bg-light-blue" 
+          onClick={ () => this.onProfileUpdate({name, age, pet})}
+          >Save</button>
+          <button 
+            className="b pa2 grow pointer hover-white w-40 bg-light-red" 
+            onClick={this.props.toggleModal}>
+            Cancel</button>
         </div>
         
         </main>
