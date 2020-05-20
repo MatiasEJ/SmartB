@@ -35,11 +35,25 @@ const getAuthTokenId = () => {
   console.log('auth ok');
 }
 
+
+const setToken = ( key, id )=> {
+  return Promise.resolve(redisClient.set(key, value));
+}
+
+
+
+
 const createSessions = (user) => {
   //create token, return user data
+  
   const { email, id } = user;
   const token = signToken(email);
-  return { success: 'true', userId: id, token }; 
+  return setToken(token, id)
+    .then(()=>{
+      return { success: 'true', userId: id, token }
+    })
+    .catch(console.log)
+  
 }
 
 
