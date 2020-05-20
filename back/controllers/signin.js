@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
-
+const redis = require('redis');
+const redisClient = redis.createClient(process.env.REDIS_URI);
 
 const handleSignin = (db, bcrypt, req, res) => {
   const { email, password } = req.body;
@@ -9,7 +10,7 @@ const handleSignin = (db, bcrypt, req, res) => {
   return db.select('email', 'hash').from('login')
     .where('email', '=', email)
     .then(data => {
-      const isValid = true; //bcrypt.compareSync(password, data[0].hash);
+      const isValid = bcrypt.compareSync(password, data[0].hash);
       if (isValid) {
         return db.select('*').from('users')
           .where('email', '=', email)
