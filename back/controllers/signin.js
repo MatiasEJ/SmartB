@@ -36,8 +36,9 @@ const getAuthTokenId = () => {
 }
 
 
-const setToken = ( key, id )=> {
+const setToken = ( key, value )=> {
   return Promise.resolve(redisClient.set(key, value));
+
 }
 
 
