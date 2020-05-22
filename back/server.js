@@ -12,13 +12,14 @@ const profile = require('./controllers/profile');
 const image = require('./controllers/image');
 
 console.log(process.env.POSTGRES_URI)
+console.log(process.env.REDIS_URI)
 const db = knex({
   client: 'pg',
   connection: process.env.POSTGRES_URI
 });
 
 const app = express();
-app.use(morgan('combined'))
+
 app.use(cors())
 app.use(bodyParser.json());
 
@@ -31,7 +32,6 @@ app.put('/image', (req, res) => { image.handleImage(req, res, db)})
 app.post('/imageurl', (req, res) => { image.handleApiCall(req, res)})
 
 const port = 3000;
-
 app.listen(port, ()=> {
   console.log(`App is running on port: ${port}!!!!`);
 })

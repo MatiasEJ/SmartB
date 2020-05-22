@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const redis = require('redis');
+
 const redisClient = redis.createClient(process.env.REDIS_URI);
 
 const handleSignin = (db, bcrypt, req, res) => {
@@ -26,19 +27,20 @@ const handleSignin = (db, bcrypt, req, res) => {
 }
 
 const signToken = (email) => {
-  const jwtPayload = { email }
+  const jwtPayload = { email };
   return jwt.sign( jwtPayload, 'JWT_SECRET', { expiresIn: '2 days'} );
 }
 
 
 const getAuthTokenId = (req, res) => {
-  const { Authorization } = req.headers;
-  return redisClient.get(Authorization, (err, reply)=>{
+  const { authorization } = req.headers;
+  return redisClient.get(authorization, (err, reply)=>{
     if(err || !reply){
       return res.status(400).json("unauthorized");
     }
-      return res.jason({id: reply});
-  })
+      return res.json({id: reply});
+  });
+
 }
 
 
@@ -51,18 +53,20 @@ const createSessions = (user) => {
   //create token, return user data
   const { email, id } = user;
   const token = signToken(email);
+  //SETTING TOKEN
   return setToken(token, id)
-    .then(()=>{
+    .then( ()=> {
       return { success: 'true', userId: id, token }
     })
-    .catch(console.log("ERROR AMIGUERO"))
+    .catch((e)=>{console.log(e)})
+  
+  
 }
 
-
 const signinAuthentication = (db, bcrypt) => (req, res) => {
-  const { Authorization } = req.headers;
-  return Authorization ? 
-    getAuthTokenId(req, res) :
+  const { authorization } = req.headers;
+  return authorization ? 
+    getAuthTokenId() :
     handleSignin(db, bcrypt, req, res)
     .then(data =>{
         return data.id && data.email ?

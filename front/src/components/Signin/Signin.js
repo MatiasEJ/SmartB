@@ -18,7 +18,7 @@ class Signin extends React.Component {
   }
 
   saveAuthTokenSession = (token) => {
-    window.sessionStorage.setItem('token', token);
+    window.localStorage.setItem('token', token);
   }
 
   onSubmitSignIn = () => {
@@ -32,9 +32,9 @@ class Signin extends React.Component {
     })
       .then(response => response.json())
       .then(data => {
-        if (data.userId && data.success === 'true' ) {
+        if ( data.userId && (data.success === 'true') ) {
           this.saveAuthTokenSession(data.token);
-          this.props.loadUser(data)
+          this.props.loadUser(data);
           this.props.onRouteChange('home');
         }
       })
