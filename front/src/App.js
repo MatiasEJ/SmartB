@@ -55,11 +55,11 @@ class App extends Component {
         method: 'POST',
         headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer '+token
+        'Authorization': token
         }
       })
-        .then(user=>{
-                if(user && user.id){
+        .then(data=>{
+                if(data && data.id){
                  console.log("need to get user profile"); 
                 }
         }).catch(e=>console.log("error"))

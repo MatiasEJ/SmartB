@@ -53,6 +53,7 @@ const createSessions = (user) => {
   //create token, return user data
   const { email, id } = user;
   const token = signToken(email);
+  console.log(token);
   //SETTING TOKEN
   return setToken(token, id)
     .then( ()=> {
@@ -66,7 +67,7 @@ const createSessions = (user) => {
 const signinAuthentication = (db, bcrypt) => (req, res) => {
   const { authorization } = req.headers;
   return authorization ? 
-    getAuthTokenId() :
+    getAuthTokenId(req, res) :
     handleSignin(db, bcrypt, req, res)
     .then(data =>{
         return data.id && data.email ?
