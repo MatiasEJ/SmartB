@@ -31,8 +31,14 @@ const signToken = (email) => {
 }
 
 
-const getAuthTokenId = () => {
-  console.log('auth ok');
+const getAuthTokenId = (req, res) => {
+  const { Authorization } = req.headers;
+  return redisClient.get(Authorization, (err, reply)=>{
+    if(err || !reply){
+      return res.status(400).json("unauthorized");
+    }
+      return res.jason({id: reply});
+  })
 }
 
 
@@ -41,32 +47,29 @@ const setToken = ( key, value )=> {
 
 }
 
-
-
-
 const createSessions = (user) => {
   //create token, return user data
-  
   const { email, id } = user;
   const token = signToken(email);
   return setToken(token, id)
     .then(()=>{
       return { success: 'true', userId: id, token }
     })
-    .catch(console.log)
-  
+    .catch(console.log("ERROR AMIGUERO"))
 }
 
 
 const signinAuthentication = (db, bcrypt) => (req, res) => {
-  const { authorization } = req.headers;
-  return authorization ? 
-    getAuthTokenId() :
+  const { Authorization } = req.headers;
+  return Authorization ? 
+    getAuthTokenId(req, res) :
     handleSignin(db, bcrypt, req, res)
     .then(data =>{
-        return data.id && data.email ? createSessions(data) : Promise.reject(data);
+        return data.id && data.email ?
+                createSessions(data) : 
+                Promise.reject(data); //COMPROMISING DATA
     })
-    .then(session =>{ res.json(session); })
+    .then(session => res.json(session) )
     .catch(e=> res.status(400).json(e) )
 }
 

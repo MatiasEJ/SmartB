@@ -15,8 +15,8 @@ services:
       - redis
     ports: 
       - "3000:3000"
-        #volumes:
-        # - ./:/usr/src/smart-brain-api
+    volumes:
+      - /e/Proyectos-programacion/smartb/back/:/src/smart-brain-api
 
   #postgres
   postgres:

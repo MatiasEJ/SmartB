@@ -47,6 +47,43 @@ class App extends Component {
     this.state = initialState;
   }
 
+  componentDidMount() {
+    const token = window.sessionStorage.getItem('token');
+   console.log(token) 
+    if(token){
+      fetch('http://192.168.99.100:3000/signin', {
+        method: 'post',
+        headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token
+        }
+      })
+        .then(res=> res.json() )
+        .then(data=>{
+          console.log(data);
+          if(data && data.id){
+            fetch('http://192.168.99.100:3000/signin', {
+              method: 'get',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+              } 
+            }).then(res=>res.json())
+              .then(user=>{
+                if(user && user.email){
+                  this.loadUser(user)
+                  this.onRouteChange('home')
+                }
+              }).catch()
+          }
+        })
+        .catch(console.log("watwat"));
+    }
+
+  }
+ 
+
+
   loadUser = (data) => {
     this.setState({user: {
       id: data.id,
