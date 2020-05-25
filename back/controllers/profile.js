@@ -12,19 +12,19 @@ const handleProfileGet = (req, res, db) => {
 }
 
 const handleProfileUpdate = (req, res, db) => {
-  const { id } = req.params;
-  const { name } = req.body.formInput;
+  const { id } = req.params
+  const { name, age, pet } = req.body.formInput
   db('users')
-    .where({ id })
-    .update({ name })
-    .then(res =>{
-      if(res) {
-        res.json("SuCCESSS update")
-      }else{
-        res.status(400).json("Unable to update")
-      }
-    })
-    .catch(e=>res.status(400).json("Error updating user"));
+  .where({ id })
+  .update({ name: name })
+  .then(resp => {
+    if (resp) {
+      res.json("success")
+    } else {
+      res.status(400).json('Not found')
+    }
+  })
+  .catch(err => res.status(400).json('error updating user'))
 }
 
 module.exports = {

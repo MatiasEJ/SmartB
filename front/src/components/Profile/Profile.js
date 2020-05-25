@@ -31,21 +31,27 @@ class Profile extends React.Component{
     }
 
     onProfileUpdate = (data) =>{
-
-      fetch('http://192.168.99.100:3000/profile/'+this.props.user.id, {
+      console.log("user ID: ", this.props.user.id);
+      console.log("ACA ESTA LA DATA: ", data);
+      fetch(`http://192.168.99.100:3000/profile/${this.props.user.id}`, {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': window.localStorage.getItem('token')
+        },
         body: JSON.stringify({ formInput: data})
       })
       .then(response=>{
-        this.props.toggleModal();
-        this.props.loadUser({ ...this.props.user, ...data});
+        if(response.status === 200 || response.status === 304){
+          this.props.loadUser({ ...this.props.user, ...data});
+          this.props.toggleModal();
+        }
       })
       .catch(e => console.log(e))
     }
 
   render(){ 
-    const {user} = this.props;
+    const {toggleModal, user} = this.props;
     const {name, age, pet } = this.state;
     return (
       <div className="profile-modal">
@@ -95,18 +101,18 @@ class Profile extends React.Component{
         <div className="mt4" style={{display:'flex',justifyContent: 'space-evenly'}}>
           <button 
           className="b pa2 grow pointer hover-white w-40 bg-light-blue" 
-          onClick={ () => this.onProfileUpdate({name, age, pet})}
+          onClick={ () => this.onProfileUpdate( {name, age, pet} )}
           >Save</button>
           <button 
             className="b pa2 grow pointer hover-white w-40 bg-light-red" 
-            onClick={this.props.toggleModal}>
+            onClick={toggleModal}>
             Cancel</button>
         </div>
         
         </main>
         <div 
         className="modal-close"
-        onClick={this.props.toggleModal}>
+        onClick={toggleModal}>
         X
         </div>
       </article>
