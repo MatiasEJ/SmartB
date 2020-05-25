@@ -38,6 +38,7 @@ const getAuthTokenId = (req, res) => {
     if(err || !reply){
       return res.status(400).json("unauthorized");
     }
+      console.log("REPLY: ", reply)
       return res.json({id: reply});
   });
 
@@ -53,7 +54,6 @@ const createSessions = (user) => {
   //create token, return user data
   const { email, id } = user;
   const token = signToken(email);
-  console.log(token);
   //SETTING TOKEN
   return setToken(token, id)
     .then( ()=> {
@@ -66,11 +66,10 @@ const createSessions = (user) => {
 
 const signinAuthentication = (db, bcrypt) => (req, res) => {
   const { authorization } = req.headers;
-  return authorization ? 
-    getAuthTokenId(req, res) :
-    handleSignin(db, bcrypt, req, res)
-    .then(data =>{
-        return data.id && data.email ?
+  return authorization ? getAuthTokenId(req, res) :
+        handleSignin(db, bcrypt, req, res)
+          .then(data =>{
+            return data.id && data.email ?
                 createSessions(data) : 
                 Promise.reject(data); //COMPROMISING DATA
     })
@@ -79,6 +78,7 @@ const signinAuthentication = (db, bcrypt) => (req, res) => {
 }
 
 module.exports = {
-  signinAuthentication: signinAuthentication
+  signinAuthentication: signinAuthentication,
+  redisClient: redisClient
 }
 

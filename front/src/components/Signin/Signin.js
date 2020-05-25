@@ -34,12 +34,25 @@ class Signin extends React.Component {
       .then(data => {
         if ( data.userId && (data.success === 'true') ) {
           this.saveAuthTokenSession(data.token);
-          this.props.loadUser(data);
-          this.props.onRouteChange('home');
-        }
-      })
+          fetch(`http://192.168.99.100:3000/profile/${data.userId}`, {
+                    method:'get',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': data.token
+                    }
+          })
+            .then(res=>res.json())
+            .then(user=>{
+              if(user && user.email){
+                this.props.loadUser(user);
+                this.props.onRouteChange('home');
+              }
+            })
+            .catch(e=>console.log("ERROR RETRIEVING DATA FROM SIGNING",e));
+      }})
+      .catch(e=>console.log("ERROR IN SUBMITSIGNIN",e));
   }
-
+  
   render() {
     const { onRouteChange } = this.props;
     return (

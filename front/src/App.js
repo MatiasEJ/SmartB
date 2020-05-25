@@ -57,11 +57,27 @@ class App extends Component {
         'Content-Type': 'application/json',
         'Authorization': token
         }
-      })
+      }).then(res=>res.json())
         .then(data=>{
-                if(data && data.id){
-                 console.log("need to get user profile"); 
-                }
+          console.log(data); 
+          if(data && data.id ){
+            console.log("need to get user profile"); 
+            fetch(`http://192.168.99.100:3000/profile/${data.id}`, {
+              method:'get',
+              headers: {
+              'Content-Type': 'application/json',
+              'Authorization': token
+              }
+            })
+            .then(res=>res.json())
+            .then(user=>{
+              console.log("USER: ", user);
+              if(user && user.email){
+                this.loadUser(user);
+                this.onRouteChange('home');
+              }
+            })
+          }
         }).catch(e=>console.log("error"))
          
     }
