@@ -12,7 +12,7 @@ const profile = require('./controllers/profile');
 const image = require('./controllers/image');
 const auth = require('./controllers/auth.js');
 
-
+//testing de node que onda si le 
 const db = knex({
   client: 'pg',
   connection: process.env.POSTGRES_URI
@@ -20,6 +20,7 @@ const db = knex({
 
 const app = express();
 
+app.use(morgan('combined'));
 app.use(cors())
 app.use(bodyParser.json());
 
