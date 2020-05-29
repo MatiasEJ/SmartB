@@ -16,7 +16,7 @@ services:
     ports: 
       - "3000:3000"
     volumes:
-      - /e/Proyectos-programacion/smartb/back/:/usr/src/smart-brain-api
+      - /e/Proyectos/smartb/back/:/usr/src/smart-brain-api
   #postgres
   postgres:
     build: ./postgres
