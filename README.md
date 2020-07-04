@@ -7,6 +7,7 @@ App en React/Node de reconocimiento facial, utilizando:
 + Testing with Jest.
 + React, Redux, Webpack.
 + Redis, PostgreSQL.
++ Integration with AWS, lambda functions. (ranking system)
 + PWA
 + Code Opt, code Splitting, React.lazy()
 + Performance Optimization - DevTools.
